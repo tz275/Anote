@@ -1,0 +1,6 @@
+selenium
+pandas
+dotenv
+os
+time
+random

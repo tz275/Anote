@@ -18,30 +18,34 @@ def runScrapper(username, password, save_csv, send_email):
     # test
     print("running")
 
+    while True:
+        try:
+            # start the selenium driver and feed the Linkedin url to it
+            wd = webdriver.Chrome(r'/Users/tingkangzhao/SeleniumDriver/chromedriver') # path to your chromedriver
+            wd.implicitly_wait(21)
 
-    # start the selenium driver and feed the Linkedin url to it
-    wd = webdriver.Chrome(r'/Users/tingkangzhao/SeleniumDriver/chromedriver') # path to your chromedriver
-    wd.implicitly_wait(21)
+            url = "https://www.linkedin.com"
+            wd.get(url)
 
-    url = "https://www.linkedin.com"
-    wd.get(url)
+            username_box = wd.find_element(By.CSS_SELECTOR, "#session_key")
+            password_box = wd.find_element(By.CSS_SELECTOR, "#session_password")
 
-    username_box = wd.find_element(By.CSS_SELECTOR, "#session_key")
-    password_box = wd.find_element(By.CSS_SELECTOR, "#session_password")
+            # send the username and password
+            username_box.send_keys(username)
+            sleep()
+            password_box.send_keys(password)
 
-    # send the username and password
-    username_box.send_keys(username)
-    sleep()
-    password_box.send_keys(password)
-
+            # click the login button to login
+            sleep()
+            wd.find_element(By.CSS_SELECTOR, "#main-content > section.section.min-h-\[560px\].flex-nowrap.pt-\[40px\].babybear\:flex-col.babybear\:min-h-\[0\].babybear\:px-mobile-container-padding.babybear\:pt-\[24px\] > div > div > form:nth-child(7) > div.flex.justify-between.sign-in-form__footer--full-width > button").click()
+            break
+        except:
+            continue
+    
     # test
+    sleep(21, 29)
     wd.quit()
     return
-
-    # click the login button to login
-    sleep()
-    wd.find_element(By.CSS_SELECTOR, "#main-content > section.section.min-h-\[560px\].flex-nowrap.pt-\[40px\].babybear\:flex-col.babybear\:min-h-\[0\].babybear\:px-mobile-container-padding.babybear\:pt-\[24px\] > div > div > form:nth-child(7) > div.flex.justify-between.sign-in-form__footer--full-width > button").click()
-
 
     while True:
         try:
@@ -52,7 +56,6 @@ def runScrapper(username, password, save_csv, send_email):
             break
         except:
             continue
-
     
     while True:
         try:
@@ -128,9 +131,7 @@ def runScrapper(username, password, save_csv, send_email):
         except:
             print(f"we failed on the url: {url}")
             pass
-        # test
-        if len(all_info) >= 10:
-            break
+
 
 
 # Execute!!!

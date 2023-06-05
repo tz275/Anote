@@ -24,10 +24,14 @@ def scrollToBottom(wd):
 def getExperience(wd):
     wd.implicitly_wait(1)
     wd.switch_to.window(wd.window_handles[1])
+    ret = ""
     for element in wd.find_elements(By.CSS_SELECTOR, "section.artdeco-card.ember-view.relative.break-words.pb3.mt2"):
         try:
-            element.find_element(By.CSS_SELECTOR, "#experience")
-            return element.text
+            experience_element = element.find_element(By.CSS_SELECTOR, "#experience")
+            parent = experience_element.find_element(By.XPATH, "..")
+            for experience in parent.find_elements(By.CSS_SELECTOR, "ul.pvs-list div.display-flex.flex-column.full-width.align-self-center"):
+                ret += experience.text
+            return ret
         except:
             pass
         sleep(1,3)

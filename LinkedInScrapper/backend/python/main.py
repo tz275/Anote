@@ -21,6 +21,13 @@ wd.implicitly_wait(21)
 url = "https://www.linkedin.com"
 wd.get(url)
 
+while True:
+    try:
+        wd.find_element(By.CSS_SELECTOR, ".google-auth")
+        break
+    except:
+        wd.refresh()
+
 # login to the Linkedin website
 load_dotenv()
 user_name = os.getenv("EMAIL")
@@ -72,11 +79,20 @@ for url in urls:
     # check the detailed information on a new tab
     wd.execute_script(f"window.open('{url}');")
     wd.switch_to.window(wd.window_handles[1])
+    # name
     person["name"] = wd.find_element(By.CSS_SELECTOR, "h1.text-heading-xlarge.inline.t-24.v-align-middle.break-words").text
     sleep(3, 9)
+    # experience
     info = getExperience(wd)
     prompt = prompt_summarize_woking_info(info)
     person["working_info"] = gpt.chat(prompt) # chatgpt
+    # email address
+    wd.find_element(By.CSS_SELECTOR, "div.pv-text-details__left-panel.mt2>span.pv-text-details__separator.t-black--light>a").click()
+    try:
+        email = wd.find_element(By.CSS_SELECTOR, ".pv-contact-info__contact-type.ci-email>div.pv-contact-info__ci-container.t-14>a").text
+    except:
+        email = None
+    wd.find_element(By.CSS_SELECTOR, "li-icon>svg").click()
 
     # use ChatGPT generate message
     prompt = prompt_email(str(person))
